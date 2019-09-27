@@ -6,7 +6,7 @@ import estados.*;
 class Main{
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Escribe el nombre del Archivo");
+        System.out.println("Write the file's name");
         String nombreArchivo = scanner.nextLine() + ".txt";
         File archivo = new File (nombreArchivo);
         System.out.println(archivo.exists());
@@ -23,7 +23,7 @@ class Main{
                 while(delimitar.hasNext()){
                     switch (numDeLinea){
                         case 1:
-                        cadenaStados.add(delimitar.next());;
+                        cadenaStados.add(delimitar.next());
                         break;  
                         case 2:
                         cadenaAlfabeto.add(delimitar.next());
@@ -32,6 +32,7 @@ class Main{
                         delimitar.next();
                         break;  
                     }
+                    
                 }
                 numDeLinea++;
             }
