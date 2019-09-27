@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import estados.*;
+//import estados.*;
 
 class Main{
     public static void main(String[] args){
@@ -42,10 +42,15 @@ class Main{
         catch (FileNotFoundException e){
             e.printStackTrace();
         }
+
+        Ndfa<String> ndfa = new Ndfa<>();
+        
+        ndfa.addState("q0");
+        ndfa.addState("q1");
+        ndfa.addTrans("q0", "q1", 'a');
+
         System.out.println(cadenaStados);
         System.out.println(cadenaAlfabeto);
-        
 
-
-    }
 }
+}   
