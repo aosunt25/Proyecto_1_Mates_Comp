@@ -10,8 +10,9 @@ public class State<T>{
     private boolean visited;
     //private State<String> neighbour;
 
-    public State(T element) {
+    public State(T element, String type) {
 		this.element = element;
+		this.type = type;
 		trans= new ArrayList<>();
 	}
 
@@ -32,9 +33,11 @@ public class State<T>{
 	public List<Trans<T>> getTrans() {
 		return trans;
 	}
+
 	public void setTrans(List<Trans<T>> trans) {
 		this.trans = trans;
 	}
+
 	public void addTrans(Trans<T> tr) {
 		trans.add(tr);
     }
