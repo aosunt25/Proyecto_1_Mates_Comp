@@ -32,6 +32,7 @@ class Main{
                         break;
                         case 3:
                         String s1 = delimitar.next();
+                        System.out.println();
                         break;
                         default:
                         System.out.println(delimitar.next());
