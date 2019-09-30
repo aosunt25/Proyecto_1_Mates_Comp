@@ -10,7 +10,7 @@ class Main{
         String nombreArchivo = scanner.nextLine() + ".txt";
         File archivo = new File (nombreArchivo);
         System.out.println(archivo.exists());
-        ArrayList cadenaStados = new ArrayList<String>();
+        ArrayList cadenaStados = new ArrayList<State>();
         ArrayList cadenaAlfabeto = new ArrayList<String>();
         cadenaAlfabeto.add("lmd");
         try{    
@@ -23,13 +23,19 @@ class Main{
                 while(delimitar.hasNext()){
                     switch (numDeLinea){
                         case 1:
-                        cadenaStados.add(delimitar.next());
+                        String l = delimitar.next();
+                        State s = new State(l);
+                        cadenaStados.add(s);
                         break;  
                         case 2:
                         cadenaAlfabeto.add(delimitar.next());
                         break;
+                        case 3:
+                        String s1 = delimitar.next();
+                        break;
                         default:
-                        delimitar.next();
+                        System.out.println(delimitar.next());
+                        
                         break;  
                     }
                     
@@ -48,7 +54,6 @@ class Main{
         ndfa.addState("q0");
         ndfa.addState("q1");
         ndfa.addTrans("q0", "q1", 'a');
-
         System.out.println(cadenaStados);
         System.out.println(cadenaAlfabeto);
 
