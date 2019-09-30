@@ -2,7 +2,7 @@
 public class Trans<T> {
 	
     private State<T> q1,q2;
-    private char symbol;
+    public char symbol;
 
 	public Trans(State<T> q1, State<T> q2, char symbol) {
 		super();

@@ -4,17 +4,20 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 //import estados.*;
 public class Ndfa<T extends Comparable<T>>{
 
-    private List<State<T>> states;
+	private List<State<T>> states;
+	private Stack<State<T>> stack;
 
     public Ndfa(){
-        states = new ArrayList<>();
+		states = new ArrayList<>();
+		stack= new Stack<>();
     }
 
-    public void addState(T qi){
+    public void addState(T qi, String type){
         boolean visited = false;
         for(State<T> state : states){
             if(state.getElement().compareTo(qi)==0){
@@ -22,9 +25,13 @@ public class Ndfa<T extends Comparable<T>>{
             }
         }
         if(!visited){
-            states.add(new State<>(qi));
+            states.add(new State<>(qi, type));
         }
     }
+
+	public List<State<T>> getStates(){
+		return states;
+	}
 
 
     public void addTrans(T q1, T q2, char symbol) {
@@ -52,5 +59,6 @@ public class Ndfa<T extends Comparable<T>>{
 			state.setVisited(false);
 		}
 	}
+
 }
  
