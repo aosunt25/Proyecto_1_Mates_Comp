@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+
 //import estados.*;
 public class Ndfa<T extends Comparable<T>>{
 
@@ -60,5 +61,7 @@ public class Ndfa<T extends Comparable<T>>{
 		}
 	}
 
+
+	
 }
  
