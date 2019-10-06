@@ -59,6 +59,7 @@ class Main{
         ndfa.addState("q0", "ini");
         ndfa.addState("q1", "fin");
         ndfa.addTrans("q0", "q0", 'l');
+        ndfa.addTrans("q0", "q1", 'l');
         ndfa.addTrans("q0", "q0", 'a');
         ndfa.addTrans("q0", "q1", 'b');
         ndfa.addTrans("q1", "q1", 'b');
@@ -68,7 +69,7 @@ class Main{
         System.out.println("Language");
         System.out.println(cadenaAlfabeto);
 
-        String str = "abax";
+        String str = "";
         StrProcessing process = new StrProcessing<>(ndfa);
 
         System.out.println("This are the states with their transitions");
