@@ -10,12 +10,15 @@ import java.util.Collections;
 
 public class StrProcessing<T extends Comparable<T>>{
 
-    private boolean acceptance;
-    public boolean accepted;
+    int len = 0;
+    String temp;
+    private char symbol;
+    private boolean acceptance = false;
+    public boolean accepted,appear;
     Ndfa<String> ndfa = new Ndfa<>();
     ArrayList language = new ArrayList<String>();
     public String str;
-    ArrayList reachableStates = new ArrayList<State>();
+    public ArrayList reachableStates = new ArrayList<State>();
 
     public StrProcessing(Ndfa<String> ndfa){   
         this.ndfa = ndfa;
@@ -41,7 +44,7 @@ public class StrProcessing<T extends Comparable<T>>{
         }
 
         if(accepted){
-            accepted = stringProcessing(str, n, ndfa.getStates().get(0).getElement());
+            accepted = stringProcessing(strn, n, ndfa.getStates().get(0).getElement());
         }
         else{
             System.out.println("There are elements in the string that do not belong to this alphabet");
@@ -49,26 +52,42 @@ public class StrProcessing<T extends Comparable<T>>{
         return accepted;
     }
 
+
     public boolean stringProcessing(String str, int n, String state){
         reachableStates = new ArrayList<String>();
+        appear = false;
+        System.out.println(n);
+        
         System.out.println(str);
         if(n == 0){
-            //checar como cambiar la i
-            //Aqui procesar cada simbolo posible
-            System.out.println("Processing lambda on initial state " + ndfa.getStates().get(0).getElement());
-            reachableStates.add(ndfa.getStates().get(0).getElement());
+            System.out.println(str);
+            int index = 0;
+            
+            reachableStates.add(state);
 
-            for(int j = 0; j < ndfa.getStates().get(0).getTrans().size();j++){
-                if(ndfa.getStates().get(0).getTrans().get(j).getSymbol() == 'l'){
-                    //if(reachableStates.size() > 0 && j>1 && reachableStates.get(j) != reachableStates.get(j-1)){
-                    reachableStates.add(ndfa.getStates().get(0).getTrans().get(j).getQ2().getElement());
-                    //}
+            for(int i = 0; i < ndfa.getStates().size();i++){
+                if(ndfa.getStates().get(i).getElement() == state){
+                    index = i;
+                }
+            }
+            int reach = reachableStates.size();
+            for(int j = 0; j < ndfa.getStates().get(index).getTrans().size();j++){   
+                if(ndfa.getStates().get(index).getTrans().get(j).getSymbol() == 'l'){
+                    for(int k = 0; k < reach ;k++){
+                       if(reachableStates.get(k).toString() == ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement()){
+                            appear = true;
+                        }
+                        else{
+                            appear = false;
+                        }
+                    }
+                    if(appear == false){
+                        reachableStates.add(ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement());
+                    }
                 }
                 
             }
-
-            System.out.println("Reachable states");
-            System.out.println(reachableStates);
+            
             for(int i = 0; i < reachableStates.size();i++){
                 for(int j = 0; j < ndfa.getStates().size();j++){
                     if(reachableStates.get(i) == ndfa.getStates().get(j).getElement()){
@@ -80,20 +99,88 @@ public class StrProcessing<T extends Comparable<T>>{
                 }
                 
             }
-        }
-        else if(n == 1){
+            System.out.println("Reachable states");
+            System.out.println(reachableStates);
 
         }
         else{
+            
+            symbol = str.charAt(0);
+            len = str.length();
+            temp = str;
             str = "";
-            for(int i = 1; i < str.length();i++){
-                str += str.charAt(i);
+            for(int i = 1; i < len;i++){
+                str += temp.charAt(i);
             }
-            //con un for enviar cada estado posible de reachable states con un solo string a procesar 
-            System.out.println(str);
-            stringProcessing(str, n-1, state);
-        }
+                    
+            int index = 0;
 
+            System.out.println("Processing lambda on state " + state);
+            reachableStates.add(state);
+            for(int i = 0; i < ndfa.getStates().size();i++){
+                if(ndfa.getStates().get(i).getElement() == state){
+                    index = i;
+                }
+            }
+            int reach = reachableStates.size();
+            for(int j = 0; j < ndfa.getStates().get(index).getTrans().size();j++){
+                
+                if(ndfa.getStates().get(index).getTrans().get(j).getSymbol() == 'l'){
+                    for(int k = 0; k < reach ;k++){
+                        if(reachableStates.get(k).toString() == ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement()){
+                            appear = true;
+                        }
+                        else{
+                            appear = false;
+                        }
+                    }
+                    if(appear == false){
+                        reachableStates.add(ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement());
+                    }
+                }
+                else if(ndfa.getStates().get(index).getTrans().get(j).getSymbol() == symbol){
+                    System.out.println("Processing " + symbol + " from " + state);
+                    for(int k = 0; k < reach ;k++){
+                        if(reachableStates.get(k).toString() == ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement()){
+                            appear = true;
+                        }
+                        else{
+                            appear = false;
+                        }
+                    }
+                    if(appear == false){
+                        reachableStates.add(ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement());
+                    }
+                }
+                
+            }
+            System.out.println("Reachable states");
+            System.out.println(reachableStates);
+            
+            /*
+            if(reachableStates.size()>0){
+                for(int i = 0; i < reachableStates.size();i++){
+                    if(str.length()>0){
+                        System.out.println("Processing " + str.charAt(0) + " on state " + reachableStates.get(i).toString());
+                        if(reachableStates.size()>1){
+                            stringProcessing(str, n-1, reachableStates.get(0).toString());
+                            stringProcessing(str, n-1, reachableStates.get(1).toString());
+                        }
+                        else{
+                            stringProcessing(str, n-1, reachableStates.get(0).toString());
+                        }
+
+                    }
+                    else{
+                        stringProcessing("", n-1, reachableStates.get(i).toString());
+                    }            
+                }
+            }*/
+            
+        }        
+        
+        
+        
         
         
         return acceptance;
