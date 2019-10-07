@@ -24,6 +24,7 @@ public class StrProcessing<T extends Comparable<T>>{
         this.ndfa = ndfa;
     }
     
+    
     public boolean stringProcessing(String strn, int n, ArrayList language){
         //This function is only to check if there are elements in the string that do not belong to the alphabet
         accepted = true;
@@ -138,7 +139,17 @@ public class StrProcessing<T extends Comparable<T>>{
                         reachableStates.add(ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement());
                     }
                 }
-                else if(ndfa.getStates().get(index).getTrans().get(j).getSymbol() == symbol){
+                
+                
+            }
+            for(int j = 0; j < reachableStates.size();j++){
+                System.out.println("HOAKSJSJ");
+                for(int i = 0; i < ndfa.getStates().size();i++){
+                    if(ndfa.getStates().get(i).getElement() == reachableStates.get(j)){
+                        index = i;
+                    }
+                }
+                if(ndfa.getStates().get(index).getTrans().get(j).getSymbol() == symbol){
                     System.out.println("Processing " + symbol + " from " + state);
                     for(int k = 0; k < reach ;k++){
                         if(reachableStates.get(k).toString() == ndfa.getStates().get(index).getTrans().get(j).getQ2().getElement()){
@@ -153,35 +164,19 @@ public class StrProcessing<T extends Comparable<T>>{
                     }
                 }
                 
+                
             }
             System.out.println("Reachable states");
             System.out.println(reachableStates);
             
-            /*
-            if(reachableStates.size()>0){
-                for(int i = 0; i < reachableStates.size();i++){
-                    if(str.length()>0){
-                        System.out.println("Processing " + str.charAt(0) + " on state " + reachableStates.get(i).toString());
-                        if(reachableStates.size()>1){
-                            stringProcessing(str, n-1, reachableStates.get(0).toString());
-                            stringProcessing(str, n-1, reachableStates.get(1).toString());
-                        }
-                        else{
-                            stringProcessing(str, n-1, reachableStates.get(0).toString());
-                        }
-
-                    }
-                    else{
-                        stringProcessing("", n-1, reachableStates.get(i).toString());
-                    }            
-                }
-            }*/
             
-        }        
-        
-        
-        
-        
+            
+            for(int i = 0; i < reachableStates.size();i++){
+                System.out.println("im doing it "+ i);
+                acceptance = stringProcessing(str, n-1, reachableStates.get(i).toString());          
+            }
+            
+        }            
         
         return acceptance;
     }
