@@ -1,56 +1,42 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 
-//import estados.*;
-public class Ndfa<T extends Comparable<T>>{
 
-    private List<State<T>> states;
+public class Ndfa<T extends Comparable>{
+    //Ver su puedo hacer una lista con transitions
+
+    public HashMap<String,String> transitions = new HashMap<String, String>();
+    public HashMap<String,String> transitions1 = new HashMap<String, String>();
+    public HashMap<String,String> transitions2 = new HashMap<String, String>();
+    public List<T> trans;
+    public HashMap<String, HashMap<String,String>> transitionTable = new HashMap<String, HashMap<String,String>>();
 
     public Ndfa(){
-        states = new ArrayList<>();
+        
     }
 
-    public void addState(T qi){
-        boolean visited = false;
-        for(State<T> state : states){
-            if(state.getElement().compareTo(qi)==0){
-                visited=true;
-            }
+    public void addState(String llave){
+        if(llave == "q0"){
+            transitionTable.put(llave, transitions);
         }
-        if(!visited){
-            states.add(new State<>(qi));
+        else if(llave == "q1"){
+            transitionTable.put(llave, transitions1);
         }
+        
     }
 
+    public void addTrans(String state1,String symbol , String state2 ){
+        //Cada uno tiene un array de transitions
+        if(state1 == "q0"){
+            transitions.put(symbol, state2);
+            transitionTable.put(state1, transitions);
+        }
+        else if(state1 == "q1"){
+            transitions1.put(symbol, state2);
+            transitionTable.put(state1, transitions1);
+        }
+        System.out.println(transitionTable);
+    }
 
-    public void addTrans(T q1, T q2, char symbol) {
-		State<T> temp1= null;
-		State<T> temp2= null;
-		for(State <T> state: states) {
-			if(state.getElement().compareTo(q1)==0) {
-				temp1= state;
-			}
-		}
-        for(State <T> state: states) {
-			if(state.getElement().compareTo(q2)==0) {
-				temp2= state;
-			}
-		}
-		if(temp1!=null&&temp2!=null) {
-			Trans<T> tr= new Trans<>(temp1,temp2,symbol);
-			temp1.addTrans(tr);
-			temp2.addTrans(tr);
-		}
-	}
     
-    public void rein() {
-		for(State<T> state:states) {
-			state.setVisited(false);
-		}
-	}
 }
- 
