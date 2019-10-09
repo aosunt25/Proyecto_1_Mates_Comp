@@ -69,8 +69,8 @@ class Main{
                         }
                         for(int j = 2; j<arrStr.size();j++){
                             //System.err.println("Holis: "+ arrStr.get(0)+" "+arrStr.get(1)+" "+arrStr.get(j));
-                            if((arrStr.get(1)=="lmd") && (arrStr.get(0)==arrStr.get(j))){
-                                System.out.println("State already in table");
+                            String s =arrStr.get(j);
+                            if((arrStr.get(1).contains("lmd")) && arrStr.get(0).contains(s)){
                             }
                             else{
                                 ndfa.addTrans(arrStr.get(0),arrStr.get(1),arrStr.get(j));
@@ -103,28 +103,34 @@ class Main{
        
         
         language = cadenaAlfabeto;
-        
-        strn = "aba";
-        System.out.println(" ");
-        System.out.println(ndfa.transitionTable);
-        System.out.println(" ");
-
-    
-        reachable = ndfa.stringProcessing(strn, initState);
-        boolean stringAcc = false;
-        for( int i = 0 ; i<reachable.size() && !stringAcc ;i++){
-            if(finalState.contains(reachable.get(i))){
-                stringAcc=true;
+        String continuar = "n";
+        do{
+            System.out.println("Cont "+ continuar);
+            Scanner sn = new Scanner(System.in);
+            System.out.println("Write the string: ");
+            strn = sn.nextLine();
+            System.out.println(" ");
+            System.out.println(ndfa.transitionTable);
+            System.out.println(" ");
+            reachable = ndfa.stringProcessing(strn, initState);
+            boolean stringAcc = false;
+            for( int i = 0 ; i<reachable.size() && !stringAcc ;i++){
+                if(finalState.contains(reachable.get(i))){
+                    stringAcc=true;
+                    
+                }
                 
             }
-            
-        }
-        if (stringAcc) {
-            System.out.println("The String: "+strn+" is accepted by the language");
-            
-        } else {
-            System.out.println("The String: "+strn+" is not accepted by the language");
-        }
+            if (stringAcc) {
+                System.out.println("The String: "+strn+" is accepted by the language");
+                
+            } else {
+                System.out.println("The String: "+strn+" is not accepted by the language");
+            }
+            System.out.println("Do you want to write another string: ");
+            System.out.println("Y/N");
+            continuar = sn.nextLine().toLowerCase();
+        }while(continuar.contentEquals("y"));
 
        
         
