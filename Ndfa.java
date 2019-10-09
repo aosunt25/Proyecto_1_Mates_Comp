@@ -31,7 +31,7 @@ public class Ndfa<T extends Comparable>{
         
 
         transitionTable.get(state1).get(symbol).add(state2);
-        System.out.println(transitionTable.get(state1).get(symbol));
+        //System.out.println(transitionTable.get(state1).get(symbol));
     }
     
 
@@ -48,17 +48,31 @@ public class Ndfa<T extends Comparable>{
                 reachable = new ArrayList<String>();
                 System.out.println("Processing lambda");
                 for(int k = 0; k < previous.size();k++){
+                    reachable.add(previous.get(k));
                     reachable.addAll(transitionTable.get(previous.get(k)).get("lmd"));
                     
                 }
+                //System.out.println("Pre");
+                //System.out.println(previous);
                 System.out.println("Processing " + str.charAt(i));
+                previous= reachable;
+                reachable = new ArrayList<String>();
                 for(j = 0; j < previous.size();j++){
                     if(transitionTable.get(previous.get(j)).containsKey(chara)){
                         reachable.addAll(transitionTable.get(previous.get(j)).get(chara));
+                        break;
                     }
                     else{
                         reachable.clear();
                     }
+                    
+                }
+                previous= reachable;
+                reachable = new ArrayList<String>();
+                System.out.println("Processing lambda");
+                for(int k = 0; k < previous.size();k++){
+                    reachable.add(previous.get(k));
+                    reachable.addAll(transitionTable.get(previous.get(k)).get("lmd"));
                     
                 }
                 
