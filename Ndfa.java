@@ -23,7 +23,7 @@ public class Ndfa<T extends Comparable>{
         
 
         transitionTable.get(state1).get(symbol).add(state2);
-        System.out.println(transitionTable.get(state1).get(symbol));
+        //System.out.println(transitionTable.get(state1).get(symbol));
     }
     
 
