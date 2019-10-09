@@ -51,15 +51,17 @@ class Main{
                     }
                     break;
                     default:
-                    String arrStr [];
-                    arrStr = new String[3];
+                    //String arrStr [];
+                    ArrayList <String> arrStr = new ArrayList<String>();
                     int i=0;
                     delimitar.useDelimiter("\\s*,|=>\\s*");
                     while(delimitar.hasNext()){
-                       arrStr[i]=delimitar.next();
+                       arrStr.add(delimitar.next());
                        i++;
                     }
-                    ndfa.addTrans(arrStr[0],arrStr[1],arrStr[2]);
+                    for(int j = 2; j<arrStr.size();j++){
+                        ndfa.addTrans(arrStr.get(0),arrStr.get(1),arrStr.get(j));
+                    }
                     break;  
                 }
                     
