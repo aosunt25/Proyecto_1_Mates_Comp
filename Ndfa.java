@@ -57,21 +57,22 @@ public class Ndfa<T extends Comparable>{
     public ArrayList stringProcessing(String str, String ini){
         previous = new ArrayList<String>();
         previous.add(ini);
-        if(str == ""){
+        if(str.length()==0){
             reachable.addAll(transitionTable.get(previous.get(0)).get("lmd"));
+            return reachable;
         }
         else{
             for(i = 0; i < str.length();i++){
                 
                 chara = String.valueOf(str.charAt(i)) ;
                 reachable = new ArrayList<String>();
-                System.out.println("Processing lambda");
+                //System.out.println("Processing lambda");
                 for(int k = 0; k < previous.size();k++){
                     reachable.addAll(transitionTable.get(previous.get(k)).get("lmd"));
                     
                 }
-                System.out.println(reachable);
-                System.out.println("Processing " + str.charAt(i));
+                //System.out.println(reachable);
+                //System.out.println("Processing " + str.charAt(i));
                 previous= reachable;
                 reachable = new ArrayList<String>();
                 for(j = 0; j < previous.size();j++){
@@ -84,28 +85,28 @@ public class Ndfa<T extends Comparable>{
                     }
                     
                 }
-                System.out.println(reachable);
+                //System.out.println(reachable);
                 previous= reachable;    
                 reachable = new ArrayList<String>();
-                System.out.println("Processing lambda");
+                //System.out.println("Processing lambda");
                 for(int k = 0; k < previous.size();k++){
                     reachable.addAll(transitionTable.get(previous.get(k)).get("lmd"));
                     
                 }
-                System.out.println(reachable);
+                //System.out.println(reachable);
                 previous = reachable;
-                System.out.println("reachable");
-                System.out.println(reachable);
+                //System.out.println("reachable");
+                //System.out.println(reachable);
             }
             if(reachable.size()>1){
                 return reachable;
             }
             else{
-                System.out.println("Processing lambda");
+                //System.out.println("Processing lambda");
                 previous = reachable;
                 reachable = new ArrayList<>();
                 if(previous.size() > 0){
-                    System.out.println(reachable + "holi");
+                    //System.out.println(reachable + "holi");
                     for(int k = 0; k < previous.size();k++){
                         reachable.addAll(transitionTable.get(previous.get(k)).get("lmd"));
                     }

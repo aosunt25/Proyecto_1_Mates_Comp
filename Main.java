@@ -4,17 +4,59 @@ import java.util.*;
 import javax.sound.midi.Receiver;
 import java.util.*;
 
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 /**
  * @author Alfredo Osuna Torres
  * @author Edgar Lopez Valdez
  */
 
-class Main{
+public class Main extends Application {
     /**
      * Main method
      * @param 
      */
-    public static void main(String[] args){
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("NDFA");
+
+        Button button1 = new Button("Submit");
+        TextField fileText = new TextField();
+        fileText.setPromptText("Write the file's name");
+        fileText.setPrefColumnCount(10);
+        
+
+        GridPane gridPane = new GridPane();
+
+        gridPane.add(button1, 20, 5, 10, 10);
+        gridPane.add(fileText,5,5,5,5);
+
+        button1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(fileText.getText());
+            }
+        });
+
+        Scene scene = new Scene(gridPane, 240, 100);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    
+        
+       
+    }
+     public static void main(String[] args){
+        launch(args);
+        
         Ndfa<String> ndfa = new Ndfa<>();
         
         int index = 0;
@@ -154,7 +196,8 @@ class Main{
         System.out.println(" ");
        
        
-        
+        System.out.println(ndfa.transitionTable);
+        System.out.println(" ");
         language = alphabetArr;
         String continuar = "n";
         /**
