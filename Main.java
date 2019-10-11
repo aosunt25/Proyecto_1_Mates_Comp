@@ -25,15 +25,11 @@ import javafx.event.*;
 import javafx.beans.value.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.Group; 
-import javafx.scene.shape.Circle; 
-import javafx.scene.shape.Line; 
+import javafx.scene.Group;
 import javafx.scene.text.*;
 import javafx.scene.paint.Color;
 import javafx.*;
-import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import java.util.ArrayList;
@@ -49,20 +45,22 @@ import java.io.*;
 
 public class Main extends Application {
     Scanner scanner = new Scanner(System.in);
-    Label label;
-    Circle circle;
     VBox vbox = new VBox();
     VBox vbox2 = new VBox();
+    VBox vbox3 = new VBox();
     HBox hbox = new HBox();
+    HBox hbox2 = new HBox();
 	Group group;
-    Line line;
     Ndfa<String> ndfa = new Ndfa();
     String strn;
     Text elemento;
     TextField fileText = new TextField();
+    Label label = new Label();
+    Label text = new Label(); 
+    Label ini = new Label();
+    Label end = new Label();
+    String texte;
     TextField fileText2 = new TextField();
-    int Circlex = 100;
-    int Circley = 100;
     Pane pane = new Pane();
     String initState = null;
     ArrayList alphabetArr = new ArrayList<String>();
@@ -98,7 +96,7 @@ public class Main extends Application {
         
         vbox2.getChildren().addAll(fileText2,button2);
         Pane pane = new Pane();
-	    Scene scene= new Scene(pane,1000,1000);
+	    Scene scene= new Scene(pane,500,500);
         vbox.getChildren().addAll(fileText, button1);
         hbox.getChildren().addAll(vbox,vbox2);
         pane.getChildren().addAll(hbox);
@@ -234,13 +232,26 @@ public class Main extends Application {
          */
         System.out.println("Alphabet");
         System.out.println(alphabetArr);
+        texte = " Alphabet {";
+        for(int i = 0; i < alphabetArr.size(); i++){
+            texte = texte + "," + alphabetArr.get(i);
+        }
+        texte = texte +"}";
+        text.setText(texte);
         System.out.println(" ");
         System.out.println("Initial State");
+        ini.setText("Initial State" + initState);
         System.err.println(initState);
         System.out.println(" ");
+        end.setText("Final State " + finalState);
         System.out.println("Final State");
         System.out.println(finalState);
         System.out.println(" ");
+        pane.getChildren().clear();
+
+        vbox3.getChildren().addAll(text, ini, end);
+        hbox.getChildren().addAll(vbox3);
+        pane.getChildren().addAll(hbox,hbox2);
        
        
      
@@ -278,9 +289,11 @@ public class Main extends Application {
                 }
                 if (stringAcc) {
                     System.out.println("The String: "+strn+" is accepted by the language");
+                    label.setText("The String: "+strn+" is accepted by the language");
                     
                 } else {
                     System.out.println("The String: "+strn+" is not accepted by the language");
+                    label.setText("The String: "+strn+" is not accepted by the language");
                 }
     
                 /**
@@ -290,27 +303,11 @@ public class Main extends Application {
                 continuar = sn.nextLine().toLowerCase();
                 System.out.println(fileText.getText());
 
-                circle = new Circle();
-                elemento = new Text();
-                circle.setFill(Color.rgb(255,0,0,.99));
-                circle.setCenterX(Circlex);
-                circle.setCenterY(Circley);
-                Circlex = Circlex + 80;                
-                Circley = Circley + 80;
-                elemento.setText("q1");
-                //elemento.setFill(Color.rgb(255,255,255,.99));
-                elemento.setFill(Color.rgb(68,68,68)); 
-                circle.toFront();
-                elemento.toFront();
-                elemento.setX(circle.getCenterX()-2);
-                elemento.setY(circle.getCenterY()+5);
-                group = new Group(circle, elemento);
-                hbox.getChildren().clear();
-                hbox.getChildren().addAll(vbox,vbox2, button3);
-                pane.getChildren().addAll(group, hbox);
+                
     
 				}
-		});
+        });
+        pane.getChildren().addAll(label);
         primaryStage.setScene(scene);
         primaryStage.show();
     
