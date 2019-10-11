@@ -2,14 +2,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import javax.sound.midi.Receiver;
+
+
+
 import java.util.*;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -22,7 +27,10 @@ import javafx.scene.layout.*;
 import javafx.scene.*;
 import javafx.scene.input.*;
 import javafx.event.*;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.StackPane;
@@ -60,6 +68,7 @@ public class Main extends Application {
     Label ini = new Label();
     Label end = new Label();
     String texte;
+    String textFinalState;
     TextField fileText2 = new TextField();
     Pane pane = new Pane();
     String initState = null;
@@ -96,16 +105,21 @@ public class Main extends Application {
         
         vbox2.getChildren().addAll(fileText2,button2);
         Pane pane = new Pane();
+        pane.getChildren().clear();
+        pane.setPickOnBounds(false);
 	    Scene scene= new Scene(pane,500,500);
         vbox.getChildren().addAll(fileText, button1);
         hbox.getChildren().addAll(vbox,vbox2);
         pane.getChildren().addAll(hbox);
-        //pane.add(fileText,5,5,5,5);
+        hbox.relocate(100, 50);
+        hbox2.relocate(100, 200);
+        
         
         button1.setOnAction(new EventHandler<ActionEvent>() {
+            
             @Override
             public void handle(ActionEvent event) {
-                //Ndfa<String> ndfa = new Ndfa<>();
+            pane.getChildren().clear();
 
         int index = 0;
         String strn;
@@ -120,13 +134,13 @@ public class Main extends Application {
         
         String nombreArchivo = fileText.getText() + ".txt";
         File archivo = new File (nombreArchivo);
-        System.out.println(archivo.exists());
-        
-        
         
 
-        alphabetArr.add("lmd");
+        
         try{    
+            finalState.clear();
+            alphabetArr.clear();
+            alphabetArr.add("lmd");
             scanner = new Scanner(archivo);
             int numDeLinea=1;
             while(scanner.hasNextLine()){
@@ -230,29 +244,56 @@ public class Main extends Application {
         /**
          * Prints all the specifications of the Language
          */
-        System.out.println("Alphabet");
-        System.out.println(alphabetArr);
-        texte = " Alphabet {";
-        for(int i = 0; i < alphabetArr.size(); i++){
-            texte = texte + "," + alphabetArr.get(i);
+        textFinalState=""+finalState.get(0);
+        texte=""+alphabetArr.get(0);
+        for(int i = 1; i < alphabetArr.size(); i++){
+            texte = texte + "-" + alphabetArr.get(i);
         }
-        texte = texte +"}";
-        text.setText(texte);
-        System.out.println(" ");
-        System.out.println("Initial State");
-        ini.setText("Initial State" + initState);
-        System.err.println(initState);
-        System.out.println(" ");
-        end.setText("Final State " + finalState);
-        System.out.println("Final State");
-        System.out.println(finalState);
-        System.out.println(" ");
-        pane.getChildren().clear();
+        for(int i = 1; i < finalState.size(); i++){
+            textFinalState = textFinalState + "-" + finalState.get(i);
+        }
+        
+        
+        TableView table = new TableView();
+        TableColumn <String,LanguageTable> initStateCol = new TableColumn<>("Initial State");
+        TableColumn <String,LanguageTable> finalStateCol = new TableColumn<>("Final State");
+        TableColumn <String,LanguageTable> alphCol = new TableColumn<>("Alphabet");
+        table.getColumns().addAll(initStateCol, finalStateCol, alphCol);
 
-        vbox3.getChildren().addAll(text, ini, end);
-        hbox.getChildren().addAll(vbox3);
+        initStateCol.setCellValueFactory(
+            new PropertyValueFactory<>("InitState")
+        );
+        finalStateCol.setCellValueFactory(
+            new PropertyValueFactory<>("FinalState")
+        );
+        alphCol.setCellValueFactory(
+            new PropertyValueFactory<>("Alphabet")
+        );
+        
+        table.setFixedCellSize(25);
+
+        table.prefHeightProperty().bind(Bindings.size(table.getItems()).multiply(table.getFixedCellSize()).add(60));
+        ObservableList<LanguageTable> languageInfo = FXCollections.observableArrayList();
+
+        languageInfo.add(new LanguageTable(initState, textFinalState, texte));
+
+        table.getItems().setAll(languageInfo);
+
+        pane.getChildren().clear();
+        
+
+        TableView tableNDFA = new TableView();
+        vbox3.getChildren().clear();
+        vbox3.getChildren().addAll(table);
+        hbox2.setAlignment(Pos.BOTTOM_LEFT);
+        
         pane.getChildren().addAll(hbox,hbox2);
+        hbox.relocate(100, 50);
+        hbox2.relocate(100, 200);
        
+        TableColumn char1Col = new TableColumn("Initial State");
+        TableColumn char2Col = new TableColumn("Final State");
+        TableColumn lmdCol = new TableColumn("Alphabet");
        
      
         /**
@@ -288,12 +329,13 @@ public class Main extends Application {
                     }  
                 }
                 if (stringAcc) {
-                    System.out.println("The String: "+strn+" is accepted by the language");
+
                     label.setText("The String: "+strn+" is accepted by the language");
+                    vbox3.getChildren().add(label);
                     
                 } else {
-                    System.out.println("The String: "+strn+" is not accepted by the language");
                     label.setText("The String: "+strn+" is not accepted by the language");
+                    vbox3.getChildren().add(label);
                 }
     
                 /**
@@ -318,5 +360,7 @@ public class Main extends Application {
     
        
     }
+
+    
 
 }  
