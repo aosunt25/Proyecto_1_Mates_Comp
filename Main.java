@@ -14,6 +14,29 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.application.Application;
+import java.awt.geom.Line2D;
+import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.*;
+import javafx.scene.input.*;
+import javafx.event.*;
+import javafx.beans.value.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.layout.StackPane;
+import javafx.scene.Group;
+import javafx.scene.text.*;
+import javafx.scene.paint.Color;
+import javafx.*;
+import javafx.scene.layout.*;
+import javafx.scene.control.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List; 
+import java.util.Random;
+import java.io.*;
 
 /**
  * @author Alfredo Osuna Torres
@@ -21,65 +44,86 @@ import javafx.stage.Stage;
  */
 
 public class Main extends Application {
+    Scanner scanner = new Scanner(System.in);
+    VBox vbox = new VBox();
+    VBox vbox2 = new VBox();
+    VBox vbox3 = new VBox();
+    HBox hbox = new HBox();
+    HBox hbox2 = new HBox();
+	Group group;
+    Ndfa<String> ndfa = new Ndfa();
+    String strn;
+    Text elemento;
+    TextField fileText = new TextField();
+    Label label = new Label();
+    Label text = new Label(); 
+    Label ini = new Label();
+    Label end = new Label();
+    String texte;
+    TextField fileText2 = new TextField();
+    Pane pane = new Pane();
+    String initState = null;
+    ArrayList alphabetArr = new ArrayList<String>();
+    ArrayList <String> reachable = new ArrayList<String>();
+    ArrayList language = new ArrayList<String>();
+    ArrayList <String> finalState = new ArrayList<String>();
+    String continuar;
+    Button button1 = new Button("Submit");
+    Button button3 = new Button("Clear");
+
+    Button button2 = new Button("Validate");
     /**
      * Main method
      * @param 
      */
+    public static void main(String[] args){
+        launch(args);
+}
+
+   
     @Override
     public void start(Stage primaryStage) {
+        
         primaryStage.setTitle("NDFA");
 
-        Button button1 = new Button("Submit");
-        TextField fileText = new TextField();
+        
         fileText.setPromptText("Write the file's name");
         fileText.setPrefColumnCount(10);
         
-
-        GridPane gridPane = new GridPane();
-
-        gridPane.add(button1, 20, 5, 10, 10);
-        gridPane.add(fileText,5,5,5,5);
-
+        
+        fileText2.setPromptText("Write string");
+        fileText2.setPrefColumnCount(10);
+        
+        vbox2.getChildren().addAll(fileText2,button2);
+        Pane pane = new Pane();
+	    Scene scene= new Scene(pane,500,500);
+        vbox.getChildren().addAll(fileText, button1);
+        hbox.getChildren().addAll(vbox,vbox2);
+        pane.getChildren().addAll(hbox);
+        //pane.add(fileText,5,5,5,5);
+        
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(fileText.getText());
-            }
-        });
+                //Ndfa<String> ndfa = new Ndfa<>();
 
-        Scene scene = new Scene(gridPane, 240, 100);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    
-        
-       
-    }
-     public static void main(String[] args){
-        launch(args);
-        
-        Ndfa<String> ndfa = new Ndfa<>();
-        
         int index = 0;
         String strn;
         Object val;
         boolean appear = false;
         
-        Scanner scanner = new Scanner(System.in);
+        //Scanner scanner = new Scanner(System.in);
        /**
         * Asks the user to write the name of the file
         * Add .txt to the string 
         */
-        System.out.println("Write the file's name");
-        String nombreArchivo = scanner.nextLine() + ".txt";
+        
+        String nombreArchivo = fileText.getText() + ".txt";
         File archivo = new File (nombreArchivo);
         System.out.println(archivo.exists());
         
         
-        String initState = null;
-        ArrayList alphabetArr = new ArrayList<String>();
-        ArrayList <String> reachable = new ArrayList<String>();
-        ArrayList language = new ArrayList<String>();
-        ArrayList <String> finalState = new ArrayList<String>();
+        
 
         alphabetArr.add("lmd");
         try{    
@@ -173,6 +217,7 @@ public class Main extends Application {
             }
 
             scanner.close();
+            System.out.println(ndfa.transitionTable);
         }
         /**
          * Catch the exception if the file does not exist
@@ -187,59 +232,91 @@ public class Main extends Application {
          */
         System.out.println("Alphabet");
         System.out.println(alphabetArr);
+        texte = " Alphabet {";
+        for(int i = 0; i < alphabetArr.size(); i++){
+            texte = texte + "," + alphabetArr.get(i);
+        }
+        texte = texte +"}";
+        text.setText(texte);
         System.out.println(" ");
         System.out.println("Initial State");
+        ini.setText("Initial State" + initState);
         System.err.println(initState);
         System.out.println(" ");
+        end.setText("Final State " + finalState);
         System.out.println("Final State");
         System.out.println(finalState);
         System.out.println(" ");
+        pane.getChildren().clear();
+
+        vbox3.getChildren().addAll(text, ini, end);
+        hbox.getChildren().addAll(vbox3);
+        pane.getChildren().addAll(hbox,hbox2);
        
        
-        System.out.println(ndfa.transitionTable);
-        System.out.println(" ");
-        language = alphabetArr;
-        String continuar = "n";
+     
         /**
          * This loop will continue until the user does not want to 
          * try any more string in the language 
          */
-        do{
-            Scanner sn = new Scanner(System.in);
-            /**
-             * Asks the user the string to be analyzed
-             */
-            System.out.println("Write the string: ");
-            strn = sn.nextLine();
-            /**
-             * @see Ndfa#stringProcessing
-             */
-            reachable = ndfa.stringProcessing(strn, initState);
-            boolean stringAcc = false;
-            /**
-             * It checks if any states in reachable are final states
-             */
-            for( int i = 0 ; i<reachable.size() && !stringAcc ;i++){
-                if(finalState.contains(reachable.get(i))){
-                    stringAcc=true;   
-                }  
-            }
-            if (stringAcc) {
-                System.out.println("The String: "+strn+" is accepted by the language");
+        
+            }   
+        });
+
+        button2.addEventHandler(MouseEvent.MOUSE_CLICKED ,new EventHandler<MouseEvent>(){
+			public void handle(MouseEvent e){
+                System.out.println(" ");
+                language = alphabetArr;
+                String continuar = "n";
+                /**
+                 * Asks the user the string to be analyzed
+                 */
+                Scanner sn = new Scanner(System.in);
+                System.out.println("Write the string: ");
+                strn = fileText2.getText();
+                /**
+                 * @see Ndfa#stringProcessing
+                 */
+                reachable = ndfa.stringProcessing(strn, initState);
+                boolean stringAcc = false;
+                /**
+                 * It checks if any states in reachable are final states
+                 */
+                for( int i = 0 ; i<reachable.size() && !stringAcc ;i++){
+                    if(finalState.contains(reachable.get(i))){
+                        stringAcc=true;   
+                    }  
+                }
+                if (stringAcc) {
+                    System.out.println("The String: "+strn+" is accepted by the language");
+                    label.setText("The String: "+strn+" is accepted by the language");
+                    
+                } else {
+                    System.out.println("The String: "+strn+" is not accepted by the language");
+                    label.setText("The String: "+strn+" is not accepted by the language");
+                }
+    
+                /**
+                 * Asks if the user wants to analys another string 
+                 */
                 
-            } else {
-                System.out.println("The String: "+strn+" is not accepted by the language");
-            }
+                //continuar = sn.nextLine().toLowerCase();
+                System.out.println(fileText.getText());
 
-            /**
-             * Asks if the user wants to analys another string 
-             */
-            System.out.println("Do you want to write another string: ");
-            System.out.println("Y/N");
-            continuar = sn.nextLine().toLowerCase();
+                
+    
+				}
+        });
+        pane.getChildren().clear();
+        hbox2.getChildren().clear();
+        vbox3.getChildren().clear();
+        vbox3.getChildren().add(label);
+        hbox2.getChildren().addAll(vbox3);
+        pane.getChildren().addAll(hbox,hbox2);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    
+       
+    }
 
-        }while(continuar.contentEquals("y"));
-      
-}
-}
-   
+}  
