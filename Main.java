@@ -49,6 +49,10 @@ import java.io.*;
 /**
  * @author Alfredo Osuna Torres
  * @author Edgar Lopez Valdez
+ * 
+ * The following code creates a Window in which the user writes the name of a .txt file with the specifications 
+ * to create an NDFA-lambda, once the txt is processed, the user can switch between txt files within the directory
+ * and validate if a string belongs to the language.
  */
 
 public class Main extends Application {
@@ -68,6 +72,7 @@ public class Main extends Application {
     Label ini = new Label();
     Label end = new Label();
     String texte;
+    File archivo;
     String textFinalState;
     TextField fileText2 = new TextField();
     Pane pane = new Pane();
@@ -133,15 +138,17 @@ public class Main extends Application {
         */
         
         String nombreArchivo = fileText.getText() + ".txt";
+        try{
         File archivo = new File (nombreArchivo);
-        
-
-        
-        try{    
             finalState.clear();
             alphabetArr.clear();
             alphabetArr.add("lmd");
+            try{
             scanner = new Scanner(archivo);
+            }
+            catch(FileNotFoundException ex){
+
+            }
             int numDeLinea=1;
             while(scanner.hasNextLine()){
                 String linea = scanner.nextLine();
@@ -232,18 +239,18 @@ public class Main extends Application {
 
             scanner.close();
             System.out.println(ndfa.transitionTable);
-        }
         /**
          * Catch the exception if the file does not exist
          */
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
+        }catch(IllegalStateException ex){
 
+        }
+        
 
         /**
          * Prints all the specifications of the Language
          */
+        try{
         textFinalState=""+finalState.get(0);
         texte=""+alphabetArr.get(0);
         for(int i = 1; i < alphabetArr.size(); i++){
@@ -301,7 +308,11 @@ public class Main extends Application {
          * try any more string in the language 
          */
         
-            }   
+            }catch(IndexOutOfBoundsException e){
+                System.out.println("The file is not in the directory");
+                start(primaryStage);
+            }
+        }   
         });
 
         button2.addEventHandler(MouseEvent.MOUSE_CLICKED ,new EventHandler<MouseEvent>(){
@@ -331,10 +342,12 @@ public class Main extends Application {
                 if (stringAcc) {
 
                     label.setText("The String: "+strn+" is accepted by the language");
+                    vbox3.getChildren().remove(label);
                     vbox3.getChildren().add(label);
                     
                 } else {
                     label.setText("The String: "+strn+" is not accepted by the language");
+                    vbox3.getChildren().remove(label);
                     vbox3.getChildren().add(label);
                 }
     
@@ -344,7 +357,7 @@ public class Main extends Application {
                 
                 //continuar = sn.nextLine().toLowerCase();
                 System.out.println(fileText.getText());
-
+            
                 
     
 				}
