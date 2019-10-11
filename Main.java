@@ -237,10 +237,11 @@ public class Main extends Application {
             texte = texte + "," + alphabetArr.get(i);
         }
         texte = texte +"}";
+        private TableView tableAlph = new TableView();
         text.setText(texte);
         System.out.println(" ");
         System.out.println("Initial State");
-        ini.setText("Initial State" + initState);
+        ini.setText("Initial State " + initState);
         System.err.println(initState);
         System.out.println(" ");
         end.setText("Final State " + finalState);
@@ -300,7 +301,7 @@ public class Main extends Application {
                  * Asks if the user wants to analys another string 
                  */
                 
-                continuar = sn.nextLine().toLowerCase();
+                //continuar = sn.nextLine().toLowerCase();
                 System.out.println(fileText.getText());
 
                 
